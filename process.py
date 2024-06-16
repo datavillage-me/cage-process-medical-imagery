@@ -87,8 +87,9 @@ def process_share_event(evt: dict):
     dicom_to_share = "https://github.com/datavillage-me/cage-process-medical-imagery/raw/main/"+df['path'][0]
     with urllib.request.urlopen(dicom_to_share) as f: 
         dicom_as_bytes = f.read()
+    
     with open("/resources/outputs/demo1.dcm", 'wb') as binary_file:
-       binary_file.write(dicom_as_bytes.read())
+       binary_file.write(dicom_as_bytes)
    
     logger.info(f"|                                                |")
     logger.info(f"--------------------------------------------------")
