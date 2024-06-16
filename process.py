@@ -66,8 +66,9 @@ def process_share_event(evt: dict):
     #dataProvider2URL="data/zna_dicom.csv"
     start_time = time.time()
     logger.info(f"|    Start time:  {start_time} secs |")
+    parameters=evt.get("parameters", "")
+    whereClause=parameters["id"]
     
-    whereClause=evt.get("parameters", "")
     if whereClause!='':
         baseQuery="SELECT path from '"+dataProvider1URL+"' as zna_anotations,'"+dataProvider2URL+"' as images WHERE zna_anotations.Studienummer=images.id AND images.id='"+whereClause+"'"
     else:
@@ -98,6 +99,10 @@ def process_share_event(evt: dict):
 if __name__ == "__main__":
     test_event = {
             "type": "SHARE",
-            "parameters": "s00001"
+            "parameters": 
+            {
+                "id":"s00001",
+                "pathologist":"p00001"
+            }
     }
     process_share_event(test_event)
