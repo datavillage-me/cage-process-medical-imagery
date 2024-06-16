@@ -77,7 +77,7 @@ def process_share_event(evt: dict):
     execution_time=(time.time() - start_time)
     logger.info(f"|    Execution time:  {execution_time} secs |")
 
-    logger.info(f"| 2. Save outputs of the collaboration           |")
+    logger.info(f"| 2. Share outputs to pathologist(s)             |")
     
     # dicom_to_share = df['path'][0]
     # dicom_as_bytes = open(dicom_to_share, "rb") 
