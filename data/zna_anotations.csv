@@ -1,0 +1,3 @@
+Studienummer,Date of birth,Patient ID,Neoadjuvant treatment,Date of sample,Sample type,Tumor location,pT,pN,pM,Histological subtype,Tumor Grade,Vascular embolization,TILs,MLH1,MSH2,MSH6,PMS2,MMR-IHC Result,POLE,P53,MSI_Mut
+s00001,5/1/1949,1,0,2/1/2024,biopsy,Endometrium,pT1b,0(sn),0,Endometrioid,1,0,1,Loss of expression,positive,positive,Loss of expression,MSI,WT,WT,WT
+s00002,5/1/1949,1,0,3/1/2024,resection,Endometrium,pT1b,0(sn),0,Endometrioid,1,0,20,Loss of expression,positive,positive,Loss of expression,MSI,WT,WT,WT

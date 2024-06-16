@@ -1,9 +1,8 @@
 """
-This code demonstrate how to train a XGBoost Logistic Regression model for credit card fraud detection
-The code use datasets from 3 parties
-- 2 banks providing the labels (class) for each transactions being fraudulent or not
-- A financial data intermediary or payment processor providing the transactions data on which Dimensionality Reduction Techniques for Data Privacy has been applied.
-
+This code demonstrate how to
+- Share medical imagery file
+- Query medical imagery file
+- Use medical imagery file to train ai model
 """
 
 
@@ -41,8 +40,8 @@ def event_processor(evt: dict):
 
     # dispatch events according to their type
     evt_type =evt.get("type", "")
-    if(evt_type == "QUERY"):
-        process_query_event(evt)
+    if(evt_type == "SHARE"):
+        process_share_event(evt)
     else:
         generic_event_processor(evt)
 
@@ -51,101 +50,43 @@ def generic_event_processor(evt: dict):
     # push an audit log to reccord for an event that is not understood
     logger.info(f"Received an unhandled event {evt}")
 
-def process_query_event(evt: dict):
-    """
-    Train an XGBoost Classifier model using the logic given in 
-     """
-
+def process_share_event(evt: dict):
     logger.info(f"--------------------------------------------------")
-    logger.info(f"|               START BENCHMARKING               |")
+    logger.info(f"|               START SHARING                    |")
     logger.info(f"|                                                |")
-    # load the training data from data providers
+    # load the image data from data provider
     # duckDB is used to load the data and aggregated them in one single datasets
     logger.info(f"| 1. Load data from data providers               |")
-    logger.info(f"|    https://github.com/./demographic.parquet |")
-    logger.info(f"|    https://github.com/./patients.parquet |")
-    dataProvider1URL="https://github.com/datavillage-me/cage-process-clinical-trial-patient-cohort-selection/raw/main/data/demographic.parquet"
-    #dataProvider1URL="data/demographic.parquet"
-    dataProvider2URL="https://github.com/datavillage-me/cage-process-clinical-trial-patient-cohort-selection/raw/main/data/patients.parquet"
-    #dataProvider2URL="data/patients.parquet"
+    logger.info(f"|    https://github.com/./zna_anotations.csv |")
+    logger.info(f"|    https://github.com/./zna_dicom.csv |")
+    #dataProvider1URL="https://github.com/datavillage-me/cage-process-medical_imagery/raw/main/data/zna_anotations.csv"
+    dataProvider1URL="data/zna_anotations.csv"
+    #dataProvider2URL="https://github.com/datavillage-me/cage-process-medical_imagery/raw/main/data/zna_dicom.csv"
+    dataProvider2URL="data/zna_dicom.csv"
     start_time = time.time()
     logger.info(f"|    Start time:  {start_time} secs |")
     
     whereClause=evt.get("parameters", "")
     if whereClause!='':
-        baseQuery="SELECT COUNT(*) as total from '"+dataProvider1URL+"' as demographic,'"+dataProvider2URL+"' as patients WHERE demographic.national_id=patients.national_id AND "+whereClause
+        baseQuery="SELECT path from '"+dataProvider1URL+"' as zna_anotations,'"+dataProvider2URL+"' as images WHERE zna_anotations.Studienummer=images.id AND images.id='"+whereClause+"'"
     else:
-        baseQuery="SELECT COUNT(*) as total from '"+dataProvider1URL+"' as demographic,'"+dataProvider2URL+"' as patients WHERE demographic.national_id=patients.national_id"
+        baseQuery="SELECT path from '"+dataProvider1URL+"' as zna_anotations,'"+dataProvider2URL+"' as images WHERE zna_anotations.Studienummer=images.id"
     
-    #total candidates
-    df = duckdb.sql(baseQuery).df()
-    totalCandidates=df['total'][0]
-    print(totalCandidates)
-    
-    #gender
-    #male
-    df = duckdb.sql(baseQuery+ " AND demographic.gender='male'").df()
-    totalGenderMale=df['total'][0]
-    #female
-    df = duckdb.sql(baseQuery+ " AND demographic.gender='female'").df()
-    totalGenderFemale=df['total'][0]
-
-    #education_level
-    #high_school
-    df = duckdb.sql(baseQuery+ " AND demographic.education_level='high_school'").df()
-    totalEducationLevelHighSchool=df['total'][0]
-    #college
-    df = duckdb.sql(baseQuery+ " AND demographic.education_level='college'").df()
-    totalEducationLevelCollege=df['total'][0]
-    #university
-    df = duckdb.sql(baseQuery+ " AND demographic.education_level='university'").df()
-    totalEducationLevelUniversity=df['total'][0]
-
-
-    #employment_status
-    #unemployed
-    df = duckdb.sql(baseQuery+ " AND demographic.employment_status='unemployed'").df()
-    totalEmploymentStatusUnemployed=df['total'][0]
-    #employed
-    df = duckdb.sql(baseQuery+ " AND demographic.employment_status='employed'").df()
-    totalEmploymentStatusEmployed=df['total'][0]
-    #student
-    df = duckdb.sql(baseQuery+ " AND demographic.employment_status='student'").df()
-    totalEmploymentStatusStudent=df['total'][0]
-    #retired
-    df = duckdb.sql(baseQuery+ " AND demographic.employment_status='retired'").df()
-    totalEmploymentStatusRetired=df['total'][0]
-
+    df=duckdb.sql(baseQuery).df()
     execution_time=(time.time() - start_time)
     logger.info(f"|    Execution time:  {execution_time} secs |")
 
     logger.info(f"| 2. Save outputs of the collaboration           |")
-    # The output file model is stored in the data folder
     
-    output= ''' {
-    "candidates": '''+str(totalCandidates)+''',
-        "gender": {
-        "male":'''+str(totalGenderMale)+''',
-        "female":'''+str(totalGenderFemale)+'''
-        },
-        "education_level": {
-        "high_school":'''+str(totalEducationLevelHighSchool)+''',
-        "college":'''+str(totalEducationLevelCollege)+''',
-        "university":'''+str(totalEducationLevelUniversity)+'''
-        },
-        "employment_status":{
-        "unemployed":'''+str(totalEmploymentStatusUnemployed)+''',
-        "employed":'''+str(totalEmploymentStatusEmployed)+''',
-        "student":'''+str(totalEmploymentStatusStudent)+''',
-        "retired":'''+str(totalEmploymentStatusRetired)+'''
-        }
-    } '''
+    # dicom_to_share = df['path'][0]
+    # dicom_as_bytes = open(dicom_to_share, "rb") 
+    # with open("my.dcm", 'wb') as binary_file:
+    #    binary_file.write(dicom_as_bytes.read())
 
-    #with open('data/my.json', 'w', newline='') as file:
-        #file.write(output)
-
-    with open('/resources/outputs/candidates-report.json', 'w', newline='') as file:
-        file.write(output)
+    dicom_to_share = "https://github.com/datavillage-me/cage-process-medical_imagery/raw/main/"+df['path'][0]
+    dicom_as_bytes = open(dicom_to_share, "rb") 
+    with open("/resources/outputs/demo1.dcm", 'wb') as binary_file:
+       binary_file.write(dicom_as_bytes.read())
    
     logger.info(f"|                                                |")
     logger.info(f"--------------------------------------------------")
@@ -153,7 +94,7 @@ def process_query_event(evt: dict):
 
 if __name__ == "__main__":
     test_event = {
-            "type": "QUERY",
-            "parameters": ""
+            "type": "SHARE",
+            "parameters": "s00001"
     }
-    process_query_event(test_event)
+    process_share_event(test_event)
