@@ -59,10 +59,10 @@ def process_share_event(evt: dict):
     logger.info(f"| 1. Load data from data providers               |")
     logger.info(f"|    https://github.com/./zna_anotations.csv |")
     logger.info(f"|    https://github.com/./zna_dicom.csv |")
-    #dataProvider1URL="https://github.com/datavillage-me/cage-process-medical_imagery/raw/main/data/zna_anotations.csv"
-    dataProvider1URL="data/zna_anotations.csv"
-    #dataProvider2URL="https://github.com/datavillage-me/cage-process-medical_imagery/raw/main/data/zna_dicom.csv"
-    dataProvider2URL="data/zna_dicom.csv"
+    dataProvider1URL="https://github.com/datavillage-me/cage-process-medical_imagery/raw/main/data/zna_anotations.csv"
+    #dataProvider1URL="data/zna_anotations.csv"
+    dataProvider2URL="https://github.com/datavillage-me/cage-process-medical_imagery/raw/main/data/zna_dicom.csv"
+    #dataProvider2URL="data/zna_dicom.csv"
     start_time = time.time()
     logger.info(f"|    Start time:  {start_time} secs |")
     
