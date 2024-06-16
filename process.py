@@ -59,9 +59,9 @@ def process_share_event(evt: dict):
     logger.info(f"| 1. Load data from data providers               |")
     logger.info(f"|    https://github.com/./zna_anotations.csv |")
     logger.info(f"|    https://github.com/./zna_dicom.csv |")
-    dataProvider1URL="https://raw.githubusercontent.com/datavillage-me/cage-process-medical_imagery/main/data/zna_anotations.csv"
+    dataProvider1URL="https://github.com/datavillage-me/cage-process-medical-imagery/raw/main/data/zna_anotations.csv"
     #dataProvider1URL="data/zna_anotations.csv"
-    dataProvider2URL="https://raw.githubusercontent.com/datavillage-me/cage-process-medical-imagery/main/data/zna_dicom.csv"
+    dataProvider2URL="https://github.com/datavillage-me/cage-process-medical-imagery/raw/main/data/zna_dicom.csv"
     #dataProvider2URL="data/zna_dicom.csv"
     start_time = time.time()
     logger.info(f"|    Start time:  {start_time} secs |")
@@ -83,7 +83,7 @@ def process_share_event(evt: dict):
     # with open("my.dcm", 'wb') as binary_file:
     #    binary_file.write(dicom_as_bytes.read())
 
-    dicom_to_share = "https://raw.githubusercontent.com/datavillage-me/cage-process-medical_imagery/main/"+df['path'][0]
+    dicom_to_share = "https://github.com/datavillage-me/cage-process-medical-imagery/raw/main/"+df['path'][0]
     dicom_as_bytes = open(dicom_to_share, "rb") 
     with open("/resources/outputs/demo1.dcm", 'wb') as binary_file:
        binary_file.write(dicom_as_bytes.read())
