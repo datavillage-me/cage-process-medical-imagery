@@ -44,6 +44,8 @@ def event_processor(evt: dict):
     evt_type =evt.get("type", "")
     if(evt_type == "SHARE"):
         process_share_event(evt)
+    elif (evt_type == "QUERY"):
+        process_query_event(evt)
     else:
         generic_event_processor(evt)
 
@@ -127,6 +129,74 @@ def process_share_event(evt: dict):
    
     logger.info(f"|                                                |")
     logger.info(f"--------------------------------------------------")
+
+def process_query_event(evt: dict):
+    logger.info(f"--------------------------------------------------")
+    logger.info(f"|               START QUERY                      |")
+    logger.info(f"|                                                |")
+    
+    # load the image data from data provider
+    # duckDB is used to load the data and aggregated them in one single datasets
+    logger.info(f"| 1. Load data from data providers               |")
+    logger.info(f"|    https://github.com/./zna_anotations.csv     |")
+    logger.info(f"|    https://github.com/./uzgent_anotations.csv          |")
+    dataProvider1URL="https://github.com/datavillage-me/cage-process-medical-imagery/raw/main/data/zna_anotations.csv"
+    #dataProvider1URL="data/zna_anotations.csv"
+    dataProvider2URL="https://github.com/datavillage-me/cage-process-medical-imagery/raw/main/data/uzgent_anotations.csv"
+    #dataProvider2URL="data/uzgent_anotations.csv"
+    start_time = time.time()
+    logger.info(f"|    Start time:  {start_time} secs          |")
+    whereClause=evt.get("parameters", "")
+    
+    if whereClause!='':
+        baseQuery="SELECT COUNT(*) as total from read_csv(['"+dataProvider1URL+"','"+dataProvider2URL+"'], union_by_name = true) WHERE "+whereClause
+    else:
+        baseQuery="SELECT COUNT(*) as total from read_csv(['"+dataProvider1URL+"','"+dataProvider2URL+"'], union_by_name = true)"
+    df=duckdb.sql(baseQuery).df()
+    totalImages=df['total'][0]
+    #vascular_embolization
+    #yes
+    df = duckdb.sql(baseQuery+ " AND vascular_embolization=1").df()
+    totalVascularEmbolizationYes=df['total'][0]
+    #no
+    df = duckdb.sql(baseQuery+ " AND vascular_embolization=0").df()
+    totalVascularEmbolizationNo=df['total'][0]
+
+    #neoadjuvant_treatment
+    #yes
+    df = duckdb.sql(baseQuery+ " AND neoadjuvant_treatment=1").df()
+    totalNeoadjuvantTreatmentYes=df['total'][0]
+    #no
+    df = duckdb.sql(baseQuery+ " AND neoadjuvant_treatment=0").df()
+    totalNeoadjuvantTreatmentNo=df['total'][0]
+
+
+    execution_time=(time.time() - start_time)
+    logger.info(f"|    Execution time:  {execution_time} secs        |")
+
+    logger.info(f"| 2. Save outputs of the collaboration           |")
+    # The output file model is stored in the data folder
+    
+    output= ''' {
+    "images": '''+str(totalImages)+''',
+        "vascular_embolization": {
+        "yes":'''+str(totalVascularEmbolizationYes)+''',
+        "no":'''+str(totalVascularEmbolizationNo)+'''
+        },
+        "neoadjuvant_treatment": {
+        "yes":'''+str(totalNeoadjuvantTreatmentYes)+''',
+        "no":'''+str(totalNeoadjuvantTreatmentNo)+'''
+        }
+    } '''
+
+    #with open('data/my.json', 'w', newline='') as file:
+    #    file.write(output)
+
+    with open('/resources/outputs/candidates-report.json', 'w', newline='') as file:
+        file.write(output)
+   
+    logger.info(f"|                                                |")
+    logger.info(f"--------------------------------------------------")
    
 
 if __name__ == "__main__":
@@ -139,4 +209,8 @@ if __name__ == "__main__":
                 "pathologist":"45920239"
             }
     }
-    process_share_event(test_event)
+    test_event = {
+            "type": "QUERY",
+             "parameters": "Tumor_location='Endometrium'"
+    }
+    process_query_event(test_event)
