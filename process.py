@@ -78,7 +78,8 @@ def process_share_event(evt: dict):
     execution_time=(time.time() - start_time)
     logger.info(f"|    Execution time:  {execution_time} secs |")
 
-    logger.info(f"| 2. Share outputs to pathologist(s)             |")
+    patologist=parameters["pathologist"]
+    logger.info(f"| 2. Share outputs to pathologist(s): {patologist}      |")
     
     # dicom_to_share = df['path'][0]
     # dicom_as_bytes = open(dicom_to_share, "rb") 
@@ -89,7 +90,7 @@ def process_share_event(evt: dict):
     with urllib.request.urlopen(dicom_to_share) as f: 
         dicom_as_bytes = f.read()
     
-    with open("/resources/outputs/demo1.dcm", 'wb') as binary_file:
+    with open("/resources/outputs/"+patologist+"-KFJE340RKDFNZE.dcm", 'wb') as binary_file:
        binary_file.write(dicom_as_bytes)
    
     logger.info(f"|                                                |")
@@ -102,7 +103,7 @@ if __name__ == "__main__":
             "parameters": 
             {
                 "id":"s00001",
-                "pathologist":"p00001"
+                "pathologist":"45920239"
             }
     }
     process_share_event(test_event)
