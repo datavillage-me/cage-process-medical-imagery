@@ -109,9 +109,10 @@ def process_share_event(evt: dict):
 
     #send notification to pathologist 
     url = "https://script.google.com/macros/s/AKfycbxDH00o1yDRty5W3yHfdZMgJaKxAcPS4VDignS_8EHH2IrNJEGvxY4X8AD2FYtJSjxFRQ/exec"
-
+    
+    sender=parameters["sender"]
     payload = json.dumps({
-    "sender": f"{patologist}",
+    "sender": f"{sender}",
     "parameters": {
         "form": "https://api.datavillage.me/collaborationSpaces/jplpngge/cage/resources/output/form-45920239-KFJE340RKDFNZE.png",
         "image": "https://api.datavillage.me/collaborationSpaces/jplpngge/cage/resources/output/image-45920239-KFJE340RKDFNZE.dcm"
@@ -134,6 +135,7 @@ if __name__ == "__main__":
             "parameters": 
             {
                 "id":"s00001",
+                "sender":"34594565",
                 "pathologist":"45920239"
             }
     }
