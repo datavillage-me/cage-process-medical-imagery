@@ -60,14 +60,14 @@ def process_share_event(evt: dict):
     # load the image data from data provider
     # duckDB is used to load the data and aggregated them in one single datasets
     logger.info(f"| 1. Load data from data providers               |")
-    logger.info(f"|    https://github.com/./zna_anotations.csv |")
-    logger.info(f"|    https://github.com/./zna_dicom.csv |")
+    logger.info(f"|    https://github.com/./zna_anotations.csv     |")
+    logger.info(f"|    https://github.com/./zna_dicom.csv          |")
     dataProvider1URL="https://github.com/datavillage-me/cage-process-medical-imagery/raw/main/data/zna_anotations.csv"
     #dataProvider1URL="data/zna_anotations.csv"
     dataProvider2URL="https://github.com/datavillage-me/cage-process-medical-imagery/raw/main/data/zna_dicom.csv"
     #dataProvider2URL="data/zna_dicom.csv"
     start_time = time.time()
-    logger.info(f"|    Start time:  {start_time} secs |")
+    logger.info(f"|    Start time:  {start_time} secs          |")
     parameters=evt.get("parameters", "")
     whereClause=parameters["id"]
     
@@ -78,17 +78,16 @@ def process_share_event(evt: dict):
     
     df=duckdb.sql(baseQuery).df()
     execution_time=(time.time() - start_time)
-    logger.info(f"|    Execution time:  {execution_time} secs |")
+    logger.info(f"|    Execution time:  {execution_time} secs        |")
 
     patologist=parameters["pathologist"]
-    logger.info(f"| 2. Share outputs to pathologist(s): {patologist}      |")
+    logger.info(f"| 2. Share outputs to pathologist(s): {patologist}    |")
     
     # dicom_to_share = df['path'][0]
     # dicom_as_bytes = open(dicom_to_share, "rb") 
     # with open("my.dcm", 'wb') as binary_file:
     #    binary_file.write(dicom_as_bytes.read())
 
-    logger.info(f"| Creation of unique links (form & image)        |")
     #write dicom image in output with unique link
     dicom_to_share = "https://github.com/datavillage-me/cage-process-medical-imagery/raw/main/"+df['path'][0]
     with urllib.request.urlopen(dicom_to_share) as f: 
@@ -105,8 +104,8 @@ def process_share_event(evt: dict):
     with open("/resources/outputs/form-"+patologist+"-KFJE340RKDFNZE.png", 'wb') as binary_file:
        binary_file.write(form_as_bytes)
 
-    logger.info(f"| Creation of unique links (form & image)        |")
-    logger.info(f"| Send notification to patologist(s): {patologist} |")
+    logger.info(f"|    Creation of unique links (form & image)     |")
+    logger.info(f"|    Send notification to patologist(s): {patologist}|")
 
     #send notification to pathologist 
     url = "https://script.google.com/macros/s/AKfycbxDH00o1yDRty5W3yHfdZMgJaKxAcPS4VDignS_8EHH2IrNJEGvxY4X8AD2FYtJSjxFRQ/exec"
