@@ -109,7 +109,7 @@ def process_share_event(evt: dict):
     logger.info(f"| Send notification to patologist(s): {patologist} |")
 
     #send notification to pathologist 
-    url = "https://script.google.com/macros/s/AKfycbyI5IouQ8iMPthY717rV5kbUuAE3lnVX3i-TN6ClU4DPKaxL_4e5ZEpoG7CqfQDmUvZPA/exec"
+    url = "https://script.google.com/macros/s/AKfycbxDH00o1yDRty5W3yHfdZMgJaKxAcPS4VDignS_8EHH2IrNJEGvxY4X8AD2FYtJSjxFRQ/exec"
 
     payload = json.dumps({
     "sender": f"{patologist}",
