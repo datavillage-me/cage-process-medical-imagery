@@ -9,6 +9,7 @@ This code demonstrate how to
 import logging
 import time
 import requests
+
 import os
 import json
 
@@ -55,6 +56,7 @@ def process_share_event(evt: dict):
     logger.info(f"--------------------------------------------------")
     logger.info(f"|               START SHARING                    |")
     logger.info(f"|                                                |")
+    
     # load the image data from data provider
     # duckDB is used to load the data and aggregated them in one single datasets
     logger.info(f"| 1. Load data from data providers               |")
@@ -86,12 +88,42 @@ def process_share_event(evt: dict):
     # with open("my.dcm", 'wb') as binary_file:
     #    binary_file.write(dicom_as_bytes.read())
 
+    logger.info(f"| Creation of unique links (form & image)        |")
+    #write dicom image in output with unique link
     dicom_to_share = "https://github.com/datavillage-me/cage-process-medical-imagery/raw/main/"+df['path'][0]
     with urllib.request.urlopen(dicom_to_share) as f: 
         dicom_as_bytes = f.read()
     
-    with open("/resources/outputs/"+patologist+"-KFJE340RKDFNZE.dcm", 'wb') as binary_file:
+    with open("/resources/outputs/image-"+patologist+"-KFJE340RKDFNZE.dcm", 'wb') as binary_file:
        binary_file.write(dicom_as_bytes)
+
+    #write demand form in output with unique link
+    form_to_share = "https://github.com/datavillage-me/cage-process-medical-imagery/raw/main/data/zna_files/form.png"
+    with urllib.request.urlopen(form_to_share) as f: 
+        form_as_bytes = f.read()
+    
+    with open("/resources/outputs/form-"+patologist+"-KFJE340RKDFNZE.png", 'wb') as binary_file:
+       binary_file.write(form_as_bytes)
+
+    logger.info(f"| Creation of unique links (form & image)        |")
+    logger.info(f"| Send notification to patologist(s): {patologist} |")
+
+    #send notification to pathologist 
+    url = "https://script.google.com/macros/s/AKfycbyI5IouQ8iMPthY717rV5kbUuAE3lnVX3i-TN6ClU4DPKaxL_4e5ZEpoG7CqfQDmUvZPA/exec"
+
+    payload = json.dumps({
+    "sender": f"{patologist}",
+    "parameters": {
+        "form": "https://api.datavillage.me/collaborationSpaces/jplpngge/cage/resources/output/form-45920239-KFJE340RKDFNZE.png",
+        "image": "https://api.datavillage.me/collaborationSpaces/jplpngge/cage/resources/output/image-45920239-KFJE340RKDFNZE.dcm"
+    }
+    })
+    headers = {
+    'Content-Type': 'application/json'
+    }
+
+    requests.request("POST", url, headers=headers, data=payload)
+
    
     logger.info(f"|                                                |")
     logger.info(f"--------------------------------------------------")
