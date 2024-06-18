@@ -154,7 +154,9 @@ def process_query_event(evt: dict):
         baseQuery="SELECT COUNT(*) as total from read_csv(['"+dataProvider1URL+"','"+dataProvider2URL+"'], union_by_name = true)"
     df=duckdb.sql(baseQuery).df()
     totalImages=df['total'][0]
-    
+    logger.info(f"|    Nbre of images:  {totalImages}              |")
+
+
     #vascular_embolization
     #yes
     df = duckdb.sql(baseQuery+ " AND vascular_embolization=1").df()
@@ -193,7 +195,7 @@ def process_query_event(evt: dict):
     #with open('data/my.json', 'w', newline='') as file:
     #    file.write(output)
 
-    with open('/resources/outputs/candidates-report.json', 'w', newline='') as file:
+    with open('/resources/outputs/images-report.json', 'w', newline='') as file:
         file.write(output)
    
     logger.info(f"|                                                |")
