@@ -261,9 +261,13 @@ def process_infer_event(evt: dict):
 def test_image(file_path, model):
     # Load and preprocess the image
     target_shape = (400, 400)
-    logger.info("try to load image")
+    logger.info("try to load image: "+file_path)
+    with open(file_path, 'r', newline='') as file:
+        logger.info("image loaded")
+
+    logger.info("try to load image keras")
     img = load_img(file_path, target_size=target_shape)
-    logger.info("image loaded")
+    logger.info("image loaded with keras")
     img_array = img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
     
