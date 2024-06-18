@@ -222,10 +222,12 @@ def process_infer_event(evt: dict):
 
     #load AI model
     logger.info(f"| 2. Load AI model                               |")
-    f = open('/resources/data/model.json')
-    #f = open('model/model.json')
-    jsonModel = json.load(f)
-    best_model = model_from_json(json.dumps(jsonModel))
+    #with open('model/model.json', 'r', newline='') as file:
+    with open('/resources/data/model.json', 'r', newline='') as file:
+        logger.info("file loaded")
+        jsonModel = json.load(file)
+        logger.info("JSON object loaded")
+        best_model = model_from_json(json.dumps(jsonModel))
 
 
     #load perform inference
