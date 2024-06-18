@@ -224,9 +224,7 @@ def process_infer_event(evt: dict):
     logger.info(f"| 2. Load AI model                               |")
     #with open('model/model.json', 'r', newline='') as file:
     with open('/resources/data/model.json', 'r', newline='') as file:
-        logger.info("file loaded")
         jsonModel = json.load(file)
-        logger.info("JSON object loaded")
         best_model = model_from_json(json.dumps(jsonModel))
 
 
@@ -263,7 +261,9 @@ def process_infer_event(evt: dict):
 def test_image(file_path, model):
     # Load and preprocess the image
     target_shape = (400, 400)
+    logger.info("try to load image")
     img = load_img(file_path, target_size=target_shape)
+    logger.info("image loaded")
     img_array = img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
     
