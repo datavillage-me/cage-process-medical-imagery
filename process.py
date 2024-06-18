@@ -15,6 +15,9 @@ import json
 
 import duckdb
 import urllib.request 
+from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.utils import load_img,img_to_array
+import numpy as np
 
 from dv_utils import default_settings, Client 
 
@@ -46,6 +49,8 @@ def event_processor(evt: dict):
         process_share_event(evt)
     elif (evt_type == "QUERY"):
         process_query_event(evt)
+    elif (evt_type == "INFER"):
+        process_infer_event(evt)
     else:
         generic_event_processor(evt)
 
@@ -200,7 +205,72 @@ def process_query_event(evt: dict):
    
     logger.info(f"|                                                |")
     logger.info(f"--------------------------------------------------")
-   
+
+def process_infer_event(evt: dict):
+    logger.info(f"--------------------------------------------------")
+    logger.info(f"|               START INFERENCE                  |")
+    logger.info(f"|                                                |")
+    
+    # load the image data from data provider
+    logger.info(f"| 1. Load data from data providers               |")
+    logger.info(f"|    https://github.com/./uzgent_files/          |")
+    start_time = time.time()
+    logger.info(f"|    Start time:  {start_time} secs          |")
+    imageId=evt.get("image_id", "")
+    test_image_file=f"https://github.com/datavillage-me/cage-process-medical-imagery/raw/main/data/uzgent_files/{imageId}.jpg"
+    #test_image_file="data/uzgent_files/g00001.jpg"
+
+    #load AI model
+    logger.info(f"| 2. Load AI model                               |")
+    #best_model = load_model('model/best.keras')
+    best_model = load_model('/resources/data/best.keras')
+
+    #load perform inference
+    logger.info(f"| 3. Predict aneurysm - cancer - tumor           |")
+    class_probabilities, predicted_class_index = test_image(test_image_file, best_model)
+
+    classes = ["aneurysm", "cancer", "tumor"]
+    for i, class_label in enumerate(classes):
+        probability = class_probabilities[i]
+        print(f'|  Class: {class_label}, Probability: {probability:.4f} |')
+
+    # Calculate and display the predicted class
+    predicted_class = classes[predicted_class_index]
+    print(f'|  The image is classified as: {predicted_class}|  ')
+    
+    output= ''' {
+        "image_id": "'''+str(imageId)+'''",
+        "class": '''+str(predicted_class)+''',
+        "probabilities":{
+        "'''+str(class_label[0])+'''":'''+str(class_probabilities[0])+''',
+        "'''+str(class_label[1])+'''":'''+str(class_probabilities[1])+''',
+        "'''+str(class_label[2])+'''":'''+str(class_probabilities[2])+''',
+        }
+    } '''
+
+    with open('/resources/outputs/score.json', 'w', newline='') as file:
+        file.write(output)
+
+    logger.info(f"|                                                |")
+    logger.info(f"--------------------------------------------------")
+
+def test_image(file_path, model):
+    # Load and preprocess the image
+    target_shape = (400, 400)
+    img = load_img(file_path, target_size=target_shape)
+    img_array = img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
+    
+    # Make predictions
+    predictions = model.predict(img_array)
+    
+    # Get the class probabilities
+    class_probabilities = predictions[0]
+    
+    # Get the predicted class index
+    predicted_class_index = np.argmax(class_probabilities)
+    
+    return class_probabilities, predicted_class_index
 
 if __name__ == "__main__":
     test_event = {
@@ -213,4 +283,11 @@ if __name__ == "__main__":
             }
     }
     test_event = {"type":"QUERY","parameters":"Tumor_location='Endometrium' AND Histological_subtype='Endometrioid' AND Sample_type='biopsy'"}
-    process_query_event(test_event)
+    
+    test_event = {
+        "type": "INFER",
+        "image_id": "g00001.jpg"
+    }
+
+    
+    process_infer_event(test_event)
