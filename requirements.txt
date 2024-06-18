@@ -5,4 +5,5 @@ pandas
 openpyxl
 tensorflow
 numpy
+PIL
 duckdb==0.10.1

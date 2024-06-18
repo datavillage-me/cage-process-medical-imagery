@@ -18,6 +18,7 @@ import urllib.request
 from tensorflow.keras.models import Sequential, load_model,model_from_json
 from tensorflow.keras.utils import load_img,img_to_array
 import numpy as np
+from PIL import Image
 
 from dv_utils import default_settings, Client 
 
@@ -261,14 +262,11 @@ def process_infer_event(evt: dict):
 def test_image(file_path, model):
     # Load and preprocess the image
     target_shape = (400, 400)
-    logger.info("try to load image: "+file_path)
-    with open(file_path, 'r', newline='') as file:
-        logger.info("image loaded")
-
-    logger.info("try to load image keras")
-    img = load_img(file_path, target_size=target_shape)
-    logger.info("image loaded with keras")
-    img_array = img_to_array(img)
+    logger.info("try to load image PIL")
+    image = Image.open(file_path)
+    image = image.resize(target_shape)
+    img_array = np.asarray(image)
+    logger.info("image loaded with PIL")
     img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
     
     # Make predictions
@@ -296,7 +294,7 @@ if __name__ == "__main__":
     
     test_event = {
         "type": "INFER",
-        "image_id": "g00004.jpg"
+        "image_id": "g00002.jpg"
     }
 
     
