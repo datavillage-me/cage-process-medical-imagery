@@ -244,7 +244,7 @@ def process_infer_event(evt: dict):
     
     output= ''' {
         "image_id": "'''+str(imageId)+'''",
-        "class": '''+str(predicted_class)+''',
+        "class": "'''+str(predicted_class)+'''",
         "probabilities":{
         "'''+str(classes[0])+'''":'''+str(class_probabilities[0])+''',
         "'''+str(classes[1])+'''":'''+str(class_probabilities[1])+''',
