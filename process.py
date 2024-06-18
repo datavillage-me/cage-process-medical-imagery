@@ -236,19 +236,19 @@ def process_infer_event(evt: dict):
     classes = ["aneurysm", "cancer", "tumor"]
     for i, class_label in enumerate(classes):
         probability = class_probabilities[i]
-        print(f'|  Class: {class_label}, Probability: {probability:.4f} |')
+        logger.info(f'|  Class: {class_label}, Probability: {probability:.4f} |')
 
     # Calculate and display the predicted class
     predicted_class = classes[predicted_class_index]
-    print(f'|  The image is classified as: {predicted_class}|  ')
+    logger.info(f'|  The image is classified as: {predicted_class}|  ')
     
     output= ''' {
         "image_id": "'''+str(imageId)+'''",
         "class": '''+str(predicted_class)+''',
         "probabilities":{
-        "'''+str(class_label[0])+'''":'''+str(class_probabilities[0])+''',
-        "'''+str(class_label[1])+'''":'''+str(class_probabilities[1])+''',
-        "'''+str(class_label[2])+'''":'''+str(class_probabilities[2])+''',
+        "'''+str(classes[0])+'''":'''+str(class_probabilities[0])+''',
+        "'''+str(classes[1])+'''":'''+str(class_probabilities[1])+''',
+        "'''+str(classes[2])+'''":'''+str(class_probabilities[2])+''',
         }
     } '''
 
@@ -262,11 +262,9 @@ def process_infer_event(evt: dict):
 def test_image(file_path, model):
     # Load and preprocess the image
     target_shape = (400, 400)
-    logger.info("try to load image PIL")
     image = Image.open(file_path)
     image = image.resize(target_shape)
     img_array = np.asarray(image)
-    logger.info("image loaded with PIL")
     img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
     
     # Make predictions
