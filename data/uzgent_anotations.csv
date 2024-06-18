@@ -1,16 +1,16 @@
 Studienummer,Date_of_birth,Patient_ID,Neoadjuvant_treatment,Date_of_sample,Sample_type,Tumor_location,pT,pN,pM,Histological_subtype,Tumor_Grade,Vascular_embolization,TILs,MLH1,MSH2,MSH6,PMS2,MMR-IHC_Result,POLE,P53,MSI_Mut
-g00001,7/14/1962,20,1,1/1/2024,biopsy,Endometrium,pT1b,1(sn),0,Endometrioid,3,0,15,Loss of expression,positive,positive,Loss of expression,MSI,WT,WT,MSI
+g00001,7/14/1962,20,1,1/1/2024,biopsy,Endometrium,pT1b,1(sn),0,Endometrioid,3,1,15,Loss of expression,positive,positive,Loss of expression,MSI,WT,WT,MSI
 g00002,3/11/1957,21,0,2/2/2024,resection,Colon,pT2,0(sn),0,Adenocarcinoma,2,0,5,Preserved expression,positive,positive,Preserved expression,MSS,WT,WT,MSI
 g00003,6/9/1970,22,0,3/3/2024,biopsy,Breast,pT2,0(sn),0,Ductal carcinoma,2,0,5,Preserved expression,positive,positive,Preserved expression,MSS,WT,WT,MSI
 g00004,4/20/1965,23,1,4/4/2024,resection,Lung,pT3,1(sn),1,Squamous cell carcinoma,3,1,20,Loss of expression,negative,positive,Loss of expression,MSI,WT,Mut,MSI
 g00005,8/11/1958,24,0,5/5/2024,biopsy,Prostate,pT2,0(sn),0,Adenocarcinoma,2,0,10,Preserved expression,positive,positive,Preserved expression,MSS,WT,WT,MSI
-g00006,1/25/1963,25,0,6/6/2024,biopsy,Endometrium,pT1b,1(sn),0,Endometrioid,1,0,1,Loss of expression,positive,positive,Loss of expression,MSI,WT,WT,WT
+g00006,1/25/1963,25,0,6/6/2024,biopsy,Endometrium,pT1b,1(sn),0,Endometrioid,1,1,1,Loss of expression,positive,positive,Loss of expression,MSI,WT,WT,WT
 g00007,9/30/1972,26,0,7/7/2024,resection,Colon,pT3,0(sn),1,Adenocarcinoma,2,1,10,Preserved expression,negative,positive,Preserved expression,MSS,WT,WT,MSI
 g00008,2/28/1956,27,0,8/8/2024,biopsy,Breast,pT1a,0(sn),0,Ductal carcinoma,1,0,1,Preserved expression,positive,positive,Preserved expression,MSS,WT,WT,MSI
 g00009,11/5/1969,28,1,9/9/2024,resection,Liver,pT3,1(sn),1,Hepatocellular carcinoma,3,1,20,Loss of expression,positive,positive,Loss of expression,MSI,WT,Mut,MSI
 g00010,12/14/1966,29,0,10/10/2024,biopsy,Lung,pT2,0(sn),0,Adenocarcinoma,2,0,5,Preserved expression,positive,positive,Preserved expression,MSS,WT,WT,MSI
 g00011,5/17/1960,30,0,11/11/2024,resection,Prostate,pT2,0(sn),0,Adenocarcinoma,2,0,10,Preserved expression,positive,positive,Preserved expression,MSS,WT,WT,MSI
-g00012,7/2/1953,31,1,12/12/2024,biopsy,Endometrium,pT1a,1(sn),0,Endometrioid,3,0,15,Loss of expression,positive,positive,Loss of expression,MSI,WT,Mut,MSI
+g00012,7/2/1953,31,1,12/12/2024,biopsy,Endometrium,pT1a,1(sn),0,Endometrioid,3,1,15,Loss of expression,positive,positive,Loss of expression,MSI,WT,Mut,MSI
 g00013,2/15/1964,32,0,1/13/2024,resection,Colon,pT2,0(sn),0,Adenocarcinoma,2,0,5,Preserved expression,positive,positive,Preserved expression,MSS,WT,WT,MSI
 g00014,8/22/1971,33,1,2/14/2024,biopsy,Breast,pT1b,1(sn),0,Ductal carcinoma,1,0,1,Preserved expression,negative,positive,Preserved expression,MSS,WT,WT,MSI
 g00015,11/1/1952,34,0,3/15/2024,resection,Liver,pT3,0(sn),1,Hepatocellular carcinoma,3,1,20,Loss of expression,positive,positive,Loss of expression,MSI,WT,Mut,MSI

@@ -212,8 +212,5 @@ if __name__ == "__main__":
                 "pathologist":"45920239"
             }
     }
-    test_event = {
-            "type": "QUERY",
-             "parameters": "Tumor_location='Endometrium'"
-    }
+    test_event = {"type":"QUERY","parameters":"Tumor_location='Endometrium' AND Histological_subtype='Endometrioid' AND Sample_type='biopsy'"}
     process_query_event(test_event)
