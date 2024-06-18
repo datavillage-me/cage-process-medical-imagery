@@ -1,8 +1,8 @@
 """
 This code demonstrate how to
 - Share medical imagery file
-- Query medical imagery file
-- Use medical imagery file to train ai model
+- Query medical imagery files
+- Use medical imagery file to predict cancer - https://www.kaggle.com/code/subhajeetdas/brain-tumor-cancer-detection-with-cnn-100-acc
 """
 
 
@@ -15,7 +15,7 @@ import json
 
 import duckdb
 import urllib.request 
-from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.models import Sequential, load_model,model_from_json
 from tensorflow.keras.utils import load_img,img_to_array
 import numpy as np
 
@@ -222,8 +222,8 @@ def process_infer_event(evt: dict):
 
     #load AI model
     logger.info(f"| 2. Load AI model                               |")
-    #best_model = load_model('best.keras')
-    best_model = load_model('/resources/data/best.keras')
+    best_model = model_from_json('/resources/data/model.json')
+
 
     #load perform inference
     logger.info(f"| 3. Predict aneurysm - cancer - tumor           |")
@@ -287,7 +287,7 @@ if __name__ == "__main__":
     
     test_event = {
         "type": "INFER",
-        "image_id": "g00001.jpg"
+        "image_id": "g00004.jpg"
     }
 
     
