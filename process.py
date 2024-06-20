@@ -248,7 +248,7 @@ def process_infer_event(evt: dict):
         "probabilities":{
         "'''+str(classes[0])+'''":"'''+str(class_probabilities[0])+'''",
         "'''+str(classes[1])+'''":"'''+str(class_probabilities[1])+'''",
-        "'''+str(classes[2])+'''":"'''+str(class_probabilities[2])+'''",
+        "'''+str(classes[2])+'''":"'''+str(class_probabilities[2])+'''"
         }
     } '''
 
